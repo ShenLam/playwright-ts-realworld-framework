@@ -31,6 +31,8 @@ test.describe("Register", () => {
       expect(body.user).toMatchObject({
         username: userData.username,
         email: userData.email,
+        bio: null,
+        image: null,
       });
     });
 
@@ -65,8 +67,8 @@ test.describe("Register", () => {
       expect(body.errors).toHaveProperty("email");
       expect(body.errors).toHaveProperty("password");
 
-      expect(body.errors.email[0]).toContain("blank");
-      expect(body.errors.password[0]).toContain("blank");
+      expect(body.errors.email[0]).toContain("can't be blank");
+      expect(body.errors.password[0]).toContain("can't be blank");
     });
   });
 });
