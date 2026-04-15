@@ -1,1 +1,14 @@
-# playwright-ts-saucedemo-framework
+# Playwright TS RealWorld Framework
+
+This project is an automation testing framework built with Playwright + TypeScript to test RealWorld (Conduit) APIs and E2E flows.
+
+## Scope
+- API Testing (Auth, User, Article...)
+- E2E Testing (Login, Article flow)
+- Test design based on real QA scenarios
+
+## Tech Stack
+
+- Playwright
+- TypeScript
+- Faker (test data generation)
