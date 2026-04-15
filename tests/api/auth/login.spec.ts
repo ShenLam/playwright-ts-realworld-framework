@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { API_ENDPOINTS } from "../../src/api/endpoints";
-import { registerUser } from "../../src/utils/auth-helper";
-import { UserResponse } from "../../src/models/user";
+import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { registerUser } from "../../../src/utils/auth-helper";
+import { UserResponse } from "../../../src/models/user";
 
 test.describe("Login", () => {
-  test("API_AUTH_SC_01: Verify user can login successfully with valid credentials", async ({ request }) => {
+  test("API_AUTH_LOGIN_01: Verify user can login successfully with valid credentials", async ({ request }) => {
     const { userData } = await test.step("Register a new user", async () => {
       return registerUser(request);
     });
@@ -43,7 +43,7 @@ test.describe("Login", () => {
     });
   });
 
-  test("API_AUTH_SC_02: Verify login fails with incorrect password", async ({ request }) => {
+  test("API_AUTH_LOGIN_02: Verify login fails with incorrect password", async ({ request }) => {
     const { userData } = await test.step("Register a new user", async () => {
       return registerUser(request);
     });
