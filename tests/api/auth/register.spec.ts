@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { API_ENDPOINTS } from "../../src/api/endpoints";
-import { UserResponse } from "../../src/models/user";
+import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { UserResponse } from "../../../src/models/user";
 
 const createUserData = () => ({
   username: `${faker.person.firstName().toLowerCase()}${faker.number.int(1000)}`,
@@ -10,7 +10,7 @@ const createUserData = () => ({
 });
 
 test.describe("Register", () => {
-  test("API_AUTH_SC_01: Verify user can register successfully with valid data", async ({ request }) => {
+  test("API_AUTH_REGISTER_01: Verify user can register successfully with valid data", async ({ request }) => {
     const userData = createUserData();
 
     const response = await test.step("Send POST request to register a new user", async () => {
@@ -42,7 +42,7 @@ test.describe("Register", () => {
     });
   });
 
-  test("API_AUTH_SC_02: Verify register fails when required fields are missing", async ({ request }) => {
+  test("API_AUTH_REGISTER_02: Verify register fails when required fields are missing", async ({ request }) => {
     const userData = createUserData();
 
     const response = await test.step("Send POST request with missing required fields", async () => {
