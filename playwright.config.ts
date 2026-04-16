@@ -5,16 +5,17 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 4,
   reporter: [["html"], ["list"]],
   use: {
     trace: "on-first-retry",
-    screenshot: 'on'
+    screenshot: "on",
   },
   projects: [
     {
       name: "api-tests",
       testDir: "./tests/api",
+      workers: 1,
+      timeout: 60 * 1000,
       use: {
         baseURL: "https://api.realworld.show",
         extraHTTPHeaders: {
