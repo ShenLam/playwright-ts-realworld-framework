@@ -4,7 +4,7 @@ import { registerUser, loginUser } from "../../../src/utils/auth-helper";
 import type { UserResponse } from "../../../src/models/user";
 
 test.describe("Current User", () => {
-  test("API_USER_CURRENT_01: Verify authenticated user can get current user information", async ({ request }) => {
+  test("API_USER_CURRENT_01: Verify authenticated user can get current user information successfully", async ({ request }) => {
     const { userData } = await test.step("Register a new user", async () => {
       return registerUser(request);
     });
