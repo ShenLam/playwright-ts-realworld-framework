@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { ArticleResponse } from "../../../src/models/article";
 
 test.describe("Get Article", () => {
@@ -19,7 +19,7 @@ test.describe("Get Article", () => {
     });
 
     const response = await test.step("Send GET article details request", async () => {
-      return request.get(API_ENDPOINTS.GET_ARTICLE.replace(":slug", slug), {
+      return request.get(apiRoutes.article(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },

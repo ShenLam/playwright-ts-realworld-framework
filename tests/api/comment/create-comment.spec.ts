@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { CommentResponse } from "../../../src/models/comment";
 
 const createCommentData = () => ({
@@ -26,7 +26,7 @@ test.describe("Create Comment", () => {
     const commentData = createCommentData();
 
     const response = await test.step("Send POST request to add comment", async () => {
-      return request.post(API_ENDPOINTS.ADD_COMMENT.replace(":slug", slug), {
+      return request.post(apiRoutes.addComment(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },

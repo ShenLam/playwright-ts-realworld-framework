@@ -1,6 +1,8 @@
 import { APIRequestContext } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { ArticleResponse } from "../models/article";
+import { API_ENDPOINTS } from "../api/endpoints";
+import type { ArticleResponse } from "../models/article";
+import { buildApiErrorMessage } from "./api-error";
 
 const createArticleData = () => ({
   title: faker.lorem.sentence(3),
@@ -10,7 +12,7 @@ const createArticleData = () => ({
 });
 
 export const createArticle = async (request: APIRequestContext, token: string, articleData = createArticleData()) => {
-  const response = await request.post("/api/articles", {
+  const response = await request.post(API_ENDPOINTS.CREATE_ARTICLE, {
     headers: {
       Authorization: `Token ${token}`,
     },
@@ -20,7 +22,7 @@ export const createArticle = async (request: APIRequestContext, token: string, a
   });
 
   if (response.status() !== 201) {
-    throw new Error(`Create failed with status ${response.status()}`);
+    throw new Error(await buildApiErrorMessage("Create article", response));
   }
 
   const body: ArticleResponse = await response.json();

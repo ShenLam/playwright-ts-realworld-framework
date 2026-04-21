@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { CommentsResponse } from "../../../src/models/comment";
 import { createComment } from "../../../src/utils/comment-helper";
 
@@ -24,7 +24,7 @@ test.describe("List Comments", () => {
     });
 
     const response = await test.step("Send GET article comments request", async () => {
-      return request.get(API_ENDPOINTS.GET_COMMENTS.replace(":slug", slug), {
+      return request.get(apiRoutes.comments(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },

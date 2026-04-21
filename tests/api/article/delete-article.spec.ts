@@ -1,8 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
-import { ArticleResponse } from "../../../src/models/article";
+import { apiRoutes } from "../../../src/api/routes";
 
 test.describe("Delete Article", () => {
   test("API_ARTICLE_DELETE_01: Verify authenticated user can delete article successfully", async ({ request }) => {
@@ -19,7 +18,7 @@ test.describe("Delete Article", () => {
     });
 
     const deleteResponse = await test.step("Send DELETE article request", async () => {
-      return request.delete(API_ENDPOINTS.DELETE_ARTICLE.replace(":slug", slug), {
+      return request.delete(apiRoutes.deleteArticle(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -31,7 +30,7 @@ test.describe("Delete Article", () => {
     });
 
     const getResponse = await test.step("Send GET article request after deletion", async () => {
-      return request.get(API_ENDPOINTS.GET_ARTICLE.replace(":slug", slug), {
+      return request.get(apiRoutes.article(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },

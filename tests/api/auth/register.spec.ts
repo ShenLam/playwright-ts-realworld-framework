@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
-import { UserResponse } from "../../../src/models/user";
+import type { UserResponse } from "../../../src/models/user";
 
 const createUserData = () => ({
   username: `${faker.person.firstName().toLowerCase()}${faker.number.int(1000)}`,

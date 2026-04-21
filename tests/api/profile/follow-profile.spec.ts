@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { registerUser, loginUser } from "../../../src/utils/auth-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { ProfileResponse } from "../../../src/models/profile";
 import { followUser } from "../../../src/utils/profile-helper";
 import { TEST_USERS } from "../../../src/constants/test-data";
@@ -18,7 +18,7 @@ test.describe("Follow Profile", () => {
     });
 
     const response = await test.step("Send POST follow request", async () => {
-      return request.post(API_ENDPOINTS.FOLLOW_USER.replace(":username", targetUsername), {
+      return request.post(apiRoutes.followProfile(targetUsername), {
         headers: {
           Authorization: `Token ${token}`,
         },
@@ -55,7 +55,7 @@ test.describe("Follow Profile", () => {
     });
 
     const response = await test.step("Send DELETE unfollow request", async () => {
-      return request.delete(API_ENDPOINTS.UNFOLLOW_USER.replace(":username", targetUsername), {
+      return request.delete(apiRoutes.unfollowProfile(targetUsername), {
         headers: {
           Authorization: `Token ${token}`,
         },

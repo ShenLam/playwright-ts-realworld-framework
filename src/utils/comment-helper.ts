@@ -1,14 +1,15 @@
-import { APIRequestContext, expect } from "@playwright/test";
+import { APIRequestContext } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { API_ENDPOINTS } from "../api/endpoints";
+import { apiRoutes } from "../api/routes";
 import type { CommentResponse, CommentsResponse } from "../models/comment";
+import { buildApiErrorMessage } from "./api-error";
 
 const createCommentData = () => ({
   body: faker.lorem.sentence(8),
 });
 
 export const createComment = async (request: APIRequestContext, token: string, slug: string, commentData = createCommentData()) => {
-  const response = await request.post(API_ENDPOINTS.ADD_COMMENT.replace(":slug", slug), {
+  const response = await request.post(apiRoutes.addComment(slug), {
     headers: {
       Authorization: `Token ${token}`,
     },
@@ -18,7 +19,7 @@ export const createComment = async (request: APIRequestContext, token: string, s
   });
 
   if (response.status() !== 201) {
-    throw new Error(`Create failed with status ${response.status()}`);
+    throw new Error(await buildApiErrorMessage("Create comment", response));
   }
 
   const body: CommentResponse = await response.json();
@@ -30,7 +31,7 @@ export const createComment = async (request: APIRequestContext, token: string, s
 };
 
 export const getComments = async (request: APIRequestContext, slug: string, token?: string) => {
-  const response = await request.get(API_ENDPOINTS.GET_COMMENTS.replace(":slug", slug), {
+  const response = await request.get(apiRoutes.comments(slug), {
     headers: token
       ? {
           Authorization: `Token ${token}`,
@@ -39,7 +40,7 @@ export const getComments = async (request: APIRequestContext, slug: string, toke
   });
 
   if (response.status() !== 200) {
-    throw new Error(`Get failed with status ${response.status()}`);
+    throw new Error(await buildApiErrorMessage("Get comments", response));
   }
 
   const body: CommentsResponse = await response.json();
