@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
-import { ArticleResponse } from "../../../src/models/article";
+import type { ArticleResponse } from "../../../src/models/article";
 
 const createArticleData = () => ({
   title: faker.lorem.sentence(3),

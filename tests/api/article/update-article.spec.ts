@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { ArticleResponse } from "../../../src/models/article";
 
 const updateArticleData = () => ({
@@ -28,7 +28,7 @@ test.describe("Update Article", () => {
     const updatedData = updateArticleData();
 
     const response = await test.step("Send PUT request to update article", async () => {
-      return request.put(API_ENDPOINTS.UPDATE_ARTICLE.replace(":slug", slug), {
+      return request.put(apiRoutes.updateArticle(slug), {
         headers: {
           Authorization: `Token ${token}`,
         },

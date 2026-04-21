@@ -2,6 +2,7 @@ import { APIRequestContext } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { API_ENDPOINTS } from "../api/endpoints";
 import type { UserResponse } from "../models/user";
+import { buildApiErrorMessage } from "./api-error";
 
 export const createUserData = () => ({
   username: `${faker.person.firstName().toLowerCase()}${faker.number.int(1000)}`,
@@ -15,7 +16,7 @@ export const registerUser = async (request: APIRequestContext, userData = create
   });
 
   if (response.status() !== 201) {
-    throw new Error(`Register failed with status ${response.status()}`);
+    throw new Error(await buildApiErrorMessage("Register user", response));
   }
 
   const body: UserResponse = await response.json();
@@ -37,7 +38,7 @@ export const loginUser = async (request: APIRequestContext, userData: { email: s
   });
 
   if (response.status() !== 200) {
-    throw new Error(`Login failed with status ${response.status()}`);
+    throw new Error(await buildApiErrorMessage("Login user", response));
   }
 
   const body: UserResponse = await response.json();

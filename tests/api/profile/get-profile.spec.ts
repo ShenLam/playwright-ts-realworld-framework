@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { registerUser, loginUser } from "../../../src/utils/auth-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import { apiRoutes } from "../../../src/api/routes";
 import type { ProfileResponse } from "../../../src/models/profile";
 import { TEST_USERS } from "../../../src/constants/test-data";
 
@@ -17,7 +17,7 @@ test.describe("Get Profile", () => {
     });
 
     const response = await test.step("Send GET profile request for another user", async () => {
-      return request.get(API_ENDPOINTS.GET_PROFILE.replace(":username", targetUsername), {
+      return request.get(apiRoutes.profile(targetUsername), {
         headers: {
           Authorization: `Token ${token}`,
         },

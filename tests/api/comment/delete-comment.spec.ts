@@ -2,8 +2,7 @@ import { test, expect } from "@playwright/test";
 import { registerUser, loginUser } from "../../../src/utils/auth-helper";
 import { createArticle } from "../../../src/utils/article-helper";
 import { createComment, getComments } from "../../../src/utils/comment-helper";
-import { API_ENDPOINTS } from "../../../src/api/endpoints";
-import type { CommentsResponse } from "../../../src/models/comment";
+import { apiRoutes } from "../../../src/api/routes";
 
 test.describe("Delete Comment", () => {
   test("API_COMMENT_DELETE_01: Verify authenticated user can delete comment successfully", async ({ request }) => {
@@ -24,7 +23,7 @@ test.describe("Delete Comment", () => {
     });
 
     const deleteResponse = await test.step("Send DELETE comment request", async () => {
-      return request.delete(API_ENDPOINTS.DELETE_COMMENT.replace(":slug", slug).replace(":id", String(comment.id)), {
+      return request.delete(apiRoutes.deleteComment(slug, comment.id), {
         headers: {
           Authorization: `Token ${token}`,
         },

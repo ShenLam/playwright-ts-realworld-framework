@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
 import { registerUser } from "../../../src/utils/auth-helper";
-import { UserResponse } from "../../../src/models/user";
+import type { UserResponse } from "../../../src/models/user";
 
 test.describe("Login", () => {
   test("API_AUTH_LOGIN_01: Verify user can log in successfully with valid credentials", async ({ request }) => {
