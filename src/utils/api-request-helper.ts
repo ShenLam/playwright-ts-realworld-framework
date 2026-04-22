@@ -1,5 +1,5 @@
 import { request as playwrightRequest, type APIRequestContext } from "@playwright/test";
-import { API_BASE_URL, API_HTTP_HEADERS } from "../api/api-config";
+import { API_BASE_URL, API_HTTP_HEADERS } from "../config/env";
 
 export const withApiRequest = async <T>(callback: (request: APIRequestContext) => Promise<T>) => {
   const apiRequest = await playwrightRequest.newContext({

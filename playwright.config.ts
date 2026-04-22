@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { API_BASE_URL, API_HTTP_HEADERS } from "./src/api/api-config";
+import { API_BASE_URL, API_HTTP_HEADERS, WEB_BASE_URL } from "./src/config/env";
 
 export default defineConfig({
   testDir: "./tests",
@@ -28,7 +28,7 @@ export default defineConfig({
       workers: 1,
       timeout: 60 * 1000,
       use: {
-        baseURL: "https://demo.realworld.show",
+        baseURL: WEB_BASE_URL,
         ...devices["Desktop Chrome"],
         channel: "chrome",
       },
