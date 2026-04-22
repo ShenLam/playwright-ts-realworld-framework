@@ -4,7 +4,7 @@ import { apiRoutes } from "../api/routes";
 import type { CommentResponse, CommentsResponse } from "../models/comment";
 import { buildApiErrorMessage } from "./api-error";
 
-const createCommentData = () => ({
+export const createCommentData = () => ({
   body: faker.lorem.sentence(8),
 });
 

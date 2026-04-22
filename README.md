@@ -1,13 +1,15 @@
 # Playwright TS RealWorld Framework
 
-This project is an automation testing framework built with Playwright + TypeScript for testing RealWorld (Conduit) APIs.
+This project is an automation testing framework built with Playwright + TypeScript for testing RealWorld (Conduit) APIs and E2E user flows.
 
 ## Scope
 
 * API testing for Auth, User, Profile, Article, Comment, and Tag modules
-* Positive and negative API scenarios based on real QA flows
+* E2E testing for Auth, Article, Comment, Profile, and Tag flows
+* Positive and negative scenarios based on real QA flows
 * Reusable API helpers for common setup actions
-* Centralized endpoint constants and dynamic route builders
+* Page Object Model for E2E page interactions
+* Centralized endpoint constants, dynamic route builders, and API config
 
 ## Tech Stack
 
@@ -19,9 +21,10 @@ This project is an automation testing framework built with Playwright + TypeScri
 
 ```text
 src/
-  api/          API endpoint constants and route builders
+  api/          API endpoint constants, route builders, and API config
   constants/    Shared static test data
   models/       TypeScript response models
+  pages/        E2E page objects
   utils/        Reusable API helper functions
 
 tests/api/
@@ -31,6 +34,13 @@ tests/api/
   article/      Create, get, list, update, and delete article tests
   comment/      Create, list, and delete comment tests
   tag/          Get tags tests
+
+tests/e2e/
+  auth/         Register and login E2E tests
+  profile/      Follow and unfollow profile E2E tests
+  article/      Create, get, edit, and delete article E2E tests
+  comment/      Add comment E2E tests
+  tag/          View tags E2E tests
 ```
 
 ## Running Tests
@@ -47,6 +57,24 @@ Run API tests:
 npx playwright test --project=api-tests
 ```
 
+List E2E tests:
+
+```bash
+npx playwright test --list --project=e2e-tests
+```
+
+Run E2E tests:
+
+```bash
+npx playwright test --project=e2e-tests
+```
+
+Run a specific E2E spec:
+
+```bash
+npx playwright test tests/e2e/article/create-article.spec.ts --project=e2e-tests
+```
+
 Open HTML report:
 
 ```bash
@@ -57,7 +85,10 @@ npx playwright show-report
 
 * `src/api/endpoints.ts` stores raw API endpoint constants.
 * `src/api/routes.ts` builds dynamic paths such as article, profile, and comment routes.
+* `src/api/api-config.ts` stores shared API base URL and default API headers.
+* `src/pages/*.ts` contains Page Object Model classes for E2E tests.
 * `src/utils/*-helper.ts` contains reusable setup helpers such as register, login, create article, create comment, follow profile, and unfollow profile.
+* `src/utils/api-request-helper.ts` creates a temporary API request context for E2E setup data.
 * `src/utils/api-error.ts` formats helper error messages with status code and response body.
 * `src/constants/test-data.ts` stores shared static test data such as the profile target username.
 
