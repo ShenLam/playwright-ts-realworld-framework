@@ -1,6 +1,6 @@
 # Playwright TS RealWorld Framework
 
-[![API Tests](https://github.com/ShenLam/playwright-ts-realworld-framework/actions/workflows/api-tests.yml/badge.svg)](https://github.com/ShenLam/playwright-ts-realworld-framework/actions/workflows/api-tests.yml)
+[![Playwright Tests](https://github.com/ShenLam/playwright-ts-realworld-framework/actions/workflows/playwright-tests.yml/badge.svg)](https://github.com/ShenLam/playwright-ts-realworld-framework/actions/workflows/playwright-tests.yml)
 
 This project is an automation testing framework built with Playwright + TypeScript for testing RealWorld (Conduit) APIs and E2E user flows.
 
@@ -113,6 +113,8 @@ Open HTML report:
 ```bash
 npm run report
 ```
+
+In GitHub Actions, Playwright HTML reports are uploaded as `api-playwright-report` and `e2e-playwright-report` artifacts for each workflow run.
 
 ## Framework Notes
 

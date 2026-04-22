@@ -30,7 +30,6 @@ export default defineConfig({
       use: {
         baseURL: WEB_BASE_URL,
         ...devices["Desktop Chrome"],
-        channel: "chrome",
       },
     },
   ],
