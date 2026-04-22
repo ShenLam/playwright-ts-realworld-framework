@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { API_BASE_URL, API_HTTP_HEADERS } from "./src/api/api-config";
 
 export default defineConfig({
   testDir: "./tests",
@@ -17,16 +18,15 @@ export default defineConfig({
       workers: 1,
       timeout: 60 * 1000,
       use: {
-        baseURL: "https://api.realworld.show",
-        extraHTTPHeaders: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        baseURL: API_BASE_URL,
+        extraHTTPHeaders: API_HTTP_HEADERS,
       },
     },
     {
       name: "e2e-tests",
       testDir: "./tests/e2e",
+      workers: 2,
+      timeout: 60 * 1000,
       use: {
         baseURL: "https://demo.realworld.show",
         ...devices["Desktop Chrome"],
