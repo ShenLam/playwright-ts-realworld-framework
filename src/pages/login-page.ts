@@ -12,6 +12,7 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly signInButton: Locator;
   readonly errorMessages: Locator;
+  readonly header: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -20,6 +21,7 @@ export class LoginPage {
     this.passwordInput = page.getByPlaceholder("Password");
     this.signInButton = page.getByRole("button", { name: "Sign in" });
     this.errorMessages = page.locator(".error-messages");
+    this.header = page.locator("app-layout-header");
   }
 
   async open() {
@@ -39,7 +41,7 @@ export class LoginPage {
 
   async expectUserLoggedIn(username: string) {
     await expect(this.page).toHaveURL(/.*\/$/);
-    await expect(this.page.getByRole("link", { name: username })).toBeVisible();
+    await expect(this.header.getByRole("link", { name: username })).toBeVisible();
   }
 
   async expectInvalidCredentialsError() {

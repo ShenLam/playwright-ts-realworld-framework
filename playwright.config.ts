@@ -25,7 +25,7 @@ export default defineConfig({
     {
       name: "e2e-tests",
       testDir: "./tests/e2e",
-      workers: 2,
+      workers: 1,
       timeout: 60 * 1000,
       use: {
         baseURL: "https://demo.realworld.show",
