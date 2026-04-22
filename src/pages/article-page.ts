@@ -17,6 +17,8 @@ export class ArticlePage {
   readonly publishButton: Locator;
   readonly editArticleLink: Locator;
   readonly deleteArticleButton: Locator;
+  readonly commentInput: Locator;
+  readonly postCommentButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -28,6 +30,8 @@ export class ArticlePage {
     this.publishButton = page.getByRole("button", { name: "Publish Article" });
     this.editArticleLink = page.getByRole("link", { name: "Edit Article" }).first();
     this.deleteArticleButton = page.getByRole("button", { name: "Delete Article" }).first();
+    this.commentInput = page.getByPlaceholder("Write a comment...");
+    this.postCommentButton = page.getByRole("button", { name: "Post Comment" });
   }
 
   async openEditor() {
@@ -64,6 +68,11 @@ export class ArticlePage {
     await this.deleteArticleButton.click();
   }
 
+  async addComment(commentBody: string) {
+    await this.commentInput.fill(commentBody);
+    await this.postCommentButton.click();
+  }
+
   async updateArticleForm(articleData: ArticleData) {
     await this.titleInput.fill(articleData.title);
     await this.descriptionInput.fill(articleData.description);
@@ -92,5 +101,10 @@ export class ArticlePage {
     await expect(this.page).toHaveURL(/.*\/$/);
     await this.page.goto(`/article/${slug}`);
     await expect(this.page.getByRole("heading", { name: title })).toBeHidden();
+  }
+
+  async expectCommentCreated(commentBody: string, username: string) {
+    await expect(this.page.getByText(commentBody)).toBeVisible();
+    await expect(this.page.getByRole("link", { name: username }).first()).toBeVisible();
   }
 }
