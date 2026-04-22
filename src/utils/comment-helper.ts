@@ -8,7 +8,12 @@ export const createCommentData = () => ({
   body: faker.lorem.sentence(8),
 });
 
-export const createComment = async (request: APIRequestContext, token: string, slug: string, commentData = createCommentData()) => {
+export const createComment = async (
+  request: APIRequestContext,
+  token: string,
+  slug: string,
+  commentData = createCommentData(),
+) => {
   const response = await request.post(apiRoutes.addComment(slug), {
     headers: {
       Authorization: `Token ${token}`,
