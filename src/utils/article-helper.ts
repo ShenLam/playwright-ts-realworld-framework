@@ -4,11 +4,17 @@ import { API_ENDPOINTS } from "../api/endpoints";
 import type { ArticleResponse } from "../models/article";
 import { buildApiErrorMessage } from "./api-error";
 
-const createArticleData = () => ({
+export const createArticleData = () => ({
   title: faker.lorem.sentence(3),
   description: faker.lorem.sentence(6),
   body: faker.lorem.paragraph(),
   tagList: [faker.word.noun(), faker.word.noun()],
+});
+
+export const updateArticleData = () => ({
+  title: faker.lorem.sentence(3),
+  description: faker.lorem.sentence(6),
+  body: faker.lorem.paragraph(),
 });
 
 export const createArticle = async (request: APIRequestContext, token: string, articleData = createArticleData()) => {
