@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
 import { loginUser, registerUser } from "../../../src/utils/auth-helper";
 import type { ArticleResponse } from "../../../src/models/article";
+import type { ErrorResponse } from "../../../src/models/error";
 
 const createArticleData = () => ({
   title: faker.lorem.sentence(3),
@@ -71,7 +72,7 @@ test.describe("Create Article", () => {
       expect(response.status()).toBe(401);
     });
 
-    const body = await test.step("Parse response body", async () => {
+    const body: ErrorResponse = await test.step("Parse response body", async () => {
       return response.json();
     });
 

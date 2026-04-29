@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import type { ErrorResponse } from "../../../src/models/error";
 import type { UserResponse } from "../../../src/models/user";
 
 const createUserData = () => ({
@@ -59,7 +60,7 @@ test.describe("Register", () => {
       expect(response.status()).toBe(422);
     });
 
-    const body = await test.step("Parse response body", async () => {
+    const body: ErrorResponse = await test.step("Parse response body", async () => {
       return response.json();
     });
 
