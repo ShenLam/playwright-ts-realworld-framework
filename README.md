@@ -10,6 +10,7 @@ This project is an automation testing framework built with Playwright + TypeScri
 - E2E testing for Auth, Article, Comment, Profile, and Tag flows
 - Positive and negative scenarios based on real QA flows
 - Reusable API helpers for common setup actions
+- Shared Playwright fixtures for API and E2E test preconditions
 - Page Object Model for E2E page interactions
 - Centralized endpoint constants, dynamic route builders, and environment config
 
@@ -45,6 +46,9 @@ tests/e2e/
   article/      Create, get, edit, and delete article E2E tests
   comment/      Add comment E2E tests
   tag/          View tags E2E tests
+
+tests/fixtures/
+  api-fixtures.ts  Shared API setup fixtures for API and E2E tests
 ```
 
 ## Installation
@@ -121,11 +125,28 @@ In GitHub Actions, Playwright HTML reports are uploaded as `api-playwright-repor
 - `src/api/endpoints.ts` stores raw API endpoint constants.
 - `src/api/routes.ts` builds dynamic paths such as article, profile, and comment routes.
 - `src/config/env.ts` stores shared API and web base URLs plus default API headers.
+- `src/models/error.ts` stores the shared API error response model.
 - `src/pages/*.ts` contains Page Object Model classes for E2E tests.
 - `src/utils/*-helper.ts` contains reusable setup helpers such as register, login, create article, create comment, follow profile, and unfollow profile.
 - `src/utils/api-request-helper.ts` creates a temporary API request context for E2E setup data.
 - `src/utils/api-error.ts` formats helper error messages with status code and response body.
 - `src/constants/test-data.ts` stores shared static test data such as the profile target username.
+- `tests/fixtures/api-fixtures.ts` provides shared setup fixtures such as authenticated users, created articles, and created comments.
+
+## Test Conventions
+
+- Keep the main request and payload in the spec when a test verifies an endpoint directly.
+- Use helpers and fixtures for setup/preconditions only.
+- E2E tests may use API setup fixtures, but the UI action being verified should stay visible in the spec.
+- Keep `test.step` blocks so Playwright reports remain readable.
+
+## Continuous Integration
+
+GitHub Actions run in this order:
+
+1. `quality`: type checking, linting, and formatting checks
+2. `api-tests`: API test suite
+3. `e2e-tests`: E2E test suite
 
 ## Test Design
 
