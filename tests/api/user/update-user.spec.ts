@@ -1,21 +1,15 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
 import type { ErrorResponse } from "../../../src/models/error";
-import { registerUser, loginUser } from "../../../src/utils/auth-helper";
 import type { UserResponse } from "../../../src/models/user";
 
 test.describe("Update User", () => {
-  test("API_USER_UPDATE_01: Verify authenticated user can update profile successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token: initialToken } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
+  test("API_USER_UPDATE_01: Verify authenticated user can update profile successfully", async ({
+    request,
+    authenticatedUser,
+  }) => {
     const updatedData = {
-      username: `${userData.username}_updated`,
+      username: `${authenticatedUser.userData.username}_updated`,
       bio: "QA automation engineer",
       image: "https://example.com/avatar.png",
     };
@@ -23,7 +17,7 @@ test.describe("Update User", () => {
     const response = await test.step("Send PUT request to update user profile", async () => {
       return request.put(API_ENDPOINTS.CURRENT_USER, {
         headers: {
-          Authorization: `Token ${initialToken}`,
+          Authorization: `Token ${authenticatedUser.token}`,
         },
         data: {
           user: updatedData,
@@ -44,8 +38,8 @@ test.describe("Update User", () => {
         username: updatedData.username,
         bio: updatedData.bio,
         image: updatedData.image,
-        email: userData.email,
-        token: initialToken,
+        email: authenticatedUser.userData.email,
+        token: authenticatedUser.token,
       });
     });
   });
