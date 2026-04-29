@@ -1,7 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { faker } from "@faker-js/faker";
-import { loginUser, registerUser } from "../../../src/utils/auth-helper";
-import { createArticle } from "../../../src/utils/article-helper";
 import { apiRoutes } from "../../../src/api/routes";
 import type { CommentResponse } from "../../../src/models/comment";
 
@@ -10,25 +8,16 @@ const createCommentData = () => ({
 });
 
 test.describe("Create Comment", () => {
-  test("API_COMMENT_CREATE_01: Verify authenticated user can add comment successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
-    const { slug } = await test.step("Create a new article", async () => {
-      return createArticle(request, token);
-    });
-
+  test("API_COMMENT_CREATE_01: Verify authenticated user can add comment successfully", async ({
+    request,
+    createdArticle,
+  }) => {
     const commentData = createCommentData();
 
     const response = await test.step("Send POST request to add comment", async () => {
-      return request.post(apiRoutes.addComment(slug), {
+      return request.post(apiRoutes.addComment(createdArticle.slug), {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${createdArticle.owner.token}`,
         },
         data: {
           comment: commentData,
@@ -47,7 +36,7 @@ test.describe("Create Comment", () => {
     await test.step("Verify created comment information", async () => {
       expect(body.comment.id).toEqual(expect.any(Number));
       expect(body.comment.body).toBe(commentData.body);
-      expect(body.comment.author.username).toBe(userData.username);
+      expect(body.comment.author.username).toBe(createdArticle.owner.userData.username);
     });
   });
 });

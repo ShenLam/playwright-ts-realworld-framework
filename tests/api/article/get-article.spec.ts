@@ -1,27 +1,13 @@
-import { test, expect } from "@playwright/test";
-import { loginUser, registerUser } from "../../../src/utils/auth-helper";
-import { createArticle } from "../../../src/utils/article-helper";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { apiRoutes } from "../../../src/api/routes";
 import type { ArticleResponse } from "../../../src/models/article";
 
 test.describe("Get Article", () => {
-  test("API_ARTICLE_GET_01: Verify user can get article details successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
-    const { article, slug } = await test.step("Create a new article", async () => {
-      return createArticle(request, token);
-    });
-
+  test("API_ARTICLE_GET_01: Verify user can get article details successfully", async ({ request, createdArticle }) => {
     const response = await test.step("Send GET article details request", async () => {
-      return request.get(apiRoutes.article(slug), {
+      return request.get(apiRoutes.article(createdArticle.slug), {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${createdArticle.owner.token}`,
         },
       });
     });
@@ -36,14 +22,14 @@ test.describe("Get Article", () => {
 
     await test.step("Verify article details", async () => {
       expect(body.article).toMatchObject({
-        slug: article.slug,
-        title: article.title,
-        description: article.description,
-        body: article.body,
+        slug: createdArticle.article.slug,
+        title: createdArticle.article.title,
+        description: createdArticle.article.description,
+        body: createdArticle.article.body,
       });
 
-      expect(body.article.tagList).toEqual(expect.arrayContaining(article.tagList));
-      expect(body.article.author.username).toBe(userData.username);
+      expect(body.article.tagList).toEqual(expect.arrayContaining(createdArticle.article.tagList));
+      expect(body.article.author.username).toBe(createdArticle.owner.userData.username);
     });
   });
 });

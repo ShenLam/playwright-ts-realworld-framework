@@ -1,5 +1,4 @@
-import { test, expect } from "@playwright/test";
-import { registerUser, loginUser } from "../../../src/utils/auth-helper";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { apiRoutes } from "../../../src/api/routes";
 import type { ProfileResponse } from "../../../src/models/profile";
 import { TEST_USERS } from "../../../src/constants/test-data";
@@ -7,19 +6,14 @@ import { TEST_USERS } from "../../../src/constants/test-data";
 const targetUsername = TEST_USERS.PROFILE_TARGET;
 
 test.describe("Get Profile", () => {
-  test("API_PROFILE_01: Verify authenticated user can get another user's profile successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
+  test("API_PROFILE_01: Verify authenticated user can get another user's profile successfully", async ({
+    request,
+    authenticatedUser,
+  }) => {
     const response = await test.step("Send GET profile request for another user", async () => {
       return request.get(apiRoutes.profile(targetUsername), {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${authenticatedUser.token}`,
         },
       });
     });

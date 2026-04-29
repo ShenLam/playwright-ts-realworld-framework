@@ -1,38 +1,23 @@
-import { test } from "@playwright/test";
+import { test } from "../../fixtures/api-fixtures";
 import { ArticlePage } from "../../../src/pages/article-page";
 import { LoginPage } from "../../../src/pages/login-page";
-import { withApiRequest } from "../../../src/utils/api-request-helper";
-import { createArticle, updateArticleData } from "../../../src/utils/article-helper";
-import { loginUser, registerUser } from "../../../src/utils/auth-helper";
+import { updateArticleData } from "../../../src/utils/article-helper";
 
 test.describe("Edit Article", () => {
-  test("E2E_ARTICLE_02: Verify authenticated user can edit article successfully", async ({ page }) => {
-    const { userData, slug } = await test.step("Create a new article by API", async () => {
-      return withApiRequest(async (apiRequest) => {
-        const { userData } = await registerUser(apiRequest);
-        const { token } = await loginUser(apiRequest, userData);
-        const { slug } = await createArticle(apiRequest, token);
-
-        return {
-          userData,
-          slug,
-        };
-      });
-    });
-
+  test("E2E_ARTICLE_02: Verify authenticated user can edit article successfully", async ({ page, createdArticle }) => {
     const loginPage = new LoginPage(page);
     const articlePage = new ArticlePage(page);
     const updatedArticleData = updateArticleData();
 
     await test.step("Log in with valid credentials", async () => {
       await loginPage.open();
-      await loginPage.fillLoginForm(userData);
+      await loginPage.fillLoginForm(createdArticle.owner.userData);
       await loginPage.submit();
-      await loginPage.expectUserLoggedIn(userData.username);
+      await loginPage.expectUserLoggedIn(createdArticle.owner.userData.username);
     });
 
     await test.step("Open created article", async () => {
-      await articlePage.openArticle(slug);
+      await articlePage.openArticle(createdArticle.slug);
     });
 
     await test.step("Open edit article page", async () => {
@@ -48,7 +33,7 @@ test.describe("Edit Article", () => {
     });
 
     await test.step("Verify article is updated successfully", async () => {
-      await articlePage.expectArticleUpdated(updatedArticleData, userData.username);
+      await articlePage.expectArticleUpdated(updatedArticleData, createdArticle.owner.userData.username);
     });
   });
 });

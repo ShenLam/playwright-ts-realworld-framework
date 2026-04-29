@@ -1,31 +1,16 @@
-import { test, expect } from "@playwright/test";
-import { registerUser, loginUser } from "../../../src/utils/auth-helper";
-import { createArticle } from "../../../src/utils/article-helper";
-import { createComment, getComments } from "../../../src/utils/comment-helper";
+import { test, expect } from "../../fixtures/api-fixtures";
+import { getComments } from "../../../src/utils/comment-helper";
 import { apiRoutes } from "../../../src/api/routes";
 
 test.describe("Delete Comment", () => {
-  test("API_COMMENT_DELETE_01: Verify authenticated user can delete comment successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
-    const { slug } = await test.step("Create a new article", async () => {
-      return createArticle(request, token);
-    });
-
-    const { comment } = await test.step("Create a new comment", async () => {
-      return createComment(request, token, slug);
-    });
-
+  test("API_COMMENT_DELETE_01: Verify authenticated user can delete comment successfully", async ({
+    request,
+    createdComment,
+  }) => {
     const deleteResponse = await test.step("Send DELETE comment request", async () => {
-      return request.delete(apiRoutes.deleteComment(slug, comment.id), {
+      return request.delete(apiRoutes.deleteComment(createdComment.slug, createdComment.comment.id), {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${createdComment.owner.token}`,
         },
       });
     });
@@ -35,11 +20,11 @@ test.describe("Delete Comment", () => {
     });
 
     const comments = await test.step("Get article comments", async () => {
-      return getComments(request, slug, token);
+      return getComments(request, createdComment.slug, createdComment.owner.token);
     });
 
     await test.step("Verify deleted comment is not in the list", async () => {
-      const found = comments.find((c) => c.id === comment.id);
+      const found = comments.find((c) => c.id === createdComment.comment.id);
       expect(found).toBeUndefined();
     });
   });

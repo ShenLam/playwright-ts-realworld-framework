@@ -1,7 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { faker } from "@faker-js/faker";
-import { loginUser, registerUser } from "../../../src/utils/auth-helper";
-import { createArticle } from "../../../src/utils/article-helper";
 import { apiRoutes } from "../../../src/api/routes";
 import type { ArticleResponse } from "../../../src/models/article";
 
@@ -12,25 +10,16 @@ const updateArticleData = () => ({
 });
 
 test.describe("Update Article", () => {
-  test("API_ARTICLE_UPDATE_01: Verify authenticated user can update article successfully", async ({ request }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
-    const { slug } = await test.step("Create a new article", async () => {
-      return createArticle(request, token);
-    });
-
+  test("API_ARTICLE_UPDATE_01: Verify authenticated user can update article successfully", async ({
+    request,
+    createdArticle,
+  }) => {
     const updatedData = updateArticleData();
 
     const response = await test.step("Send PUT request to update article", async () => {
-      return request.put(apiRoutes.updateArticle(slug), {
+      return request.put(apiRoutes.updateArticle(createdArticle.slug), {
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${createdArticle.owner.token}`,
         },
         data: {
           article: updatedData,
@@ -58,7 +47,7 @@ test.describe("Update Article", () => {
         body: updatedData.body,
       });
 
-      expect(body.article.author.username).toBe(userData.username);
+      expect(body.article.author.username).toBe(createdArticle.owner.userData.username);
     });
   });
 });

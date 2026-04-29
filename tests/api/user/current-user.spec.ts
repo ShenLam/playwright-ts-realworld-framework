@@ -1,25 +1,17 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/api-fixtures";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
 import type { ErrorResponse } from "../../../src/models/error";
-import { registerUser, loginUser } from "../../../src/utils/auth-helper";
 import type { UserResponse } from "../../../src/models/user";
 
 test.describe("Current User", () => {
   test("API_USER_CURRENT_01: Verify authenticated user can get current user information successfully", async ({
     request,
+    authenticatedUser,
   }) => {
-    const { userData } = await test.step("Register a new user", async () => {
-      return registerUser(request);
-    });
-
-    const { token: initialToken } = await test.step("Login to get authentication token", async () => {
-      return loginUser(request, userData);
-    });
-
     const response = await test.step("Send GET current user request with valid token", async () => {
       return request.get(API_ENDPOINTS.CURRENT_USER, {
         headers: {
-          Authorization: `Token ${initialToken}`,
+          Authorization: `Token ${authenticatedUser.token}`,
         },
       });
     });
@@ -34,9 +26,9 @@ test.describe("Current User", () => {
 
     await test.step("Verify current user information matches registered account", async () => {
       expect(body.user).toMatchObject({
-        username: userData.username,
-        email: userData.email,
-        token: initialToken,
+        username: authenticatedUser.userData.username,
+        email: authenticatedUser.userData.email,
+        token: authenticatedUser.token,
         bio: null,
         image: null,
       });
