@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { API_ENDPOINTS } from "../../../src/api/endpoints";
+import type { ErrorResponse } from "../../../src/models/error";
 import { registerUser, loginUser } from "../../../src/utils/auth-helper";
 import type { UserResponse } from "../../../src/models/user";
 
@@ -68,7 +69,7 @@ test.describe("Update User", () => {
       expect(response.status()).toBe(401);
     });
 
-    const body = await test.step("Parse response body", async () => {
+    const body: ErrorResponse = await test.step("Parse response body", async () => {
       return response.json();
     });
 
